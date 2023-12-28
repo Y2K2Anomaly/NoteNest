@@ -1,0 +1,13 @@
+# .gitignore
+
+# Ignore .env files
+.env*
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore .next directory
+.next/
+
+# Ignore next-env.d.ts file
+next-env.d.ts
