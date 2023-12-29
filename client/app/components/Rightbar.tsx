@@ -38,7 +38,7 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
     }, []);
 
     const [editedDesc, setEditedDesc] = useState("");
-    const descRef = useRef(null) as any;
+    const descRef = useRef() as any;
 
     const onSaveEdit = async () => {
         try {
@@ -75,7 +75,7 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
                         <div className='w-full h-[350px] absolute p-2'>
                             {
                                 allNotes?.map((note: any) => (
-                                    <span key={note?._id} className={`${noteId === note?._id ? "block" : "hidden"} text-black text-lg`}>
+                                    <span key={note?._id} className={`${noteId === note?._id ? "block" : "hidden"} text-black h-full text-lg`}>
                                         {isEdit ? (
                                             <textarea
                                                 ref={descRef}
