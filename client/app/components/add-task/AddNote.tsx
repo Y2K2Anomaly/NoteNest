@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 
-const AddNote = ({ AddNoteBackHandler }: any) => {
+const AddNote = ({ AddNoteBackHandler, AddNewNoteHandler }: any) => {
 
     const [note, setNote] = useState({
         title: '',
@@ -18,12 +18,13 @@ const AddNote = ({ AddNoteBackHandler }: any) => {
 
         try {
             await createNote(note);
-            AddNoteBackHandler(false, note);
-            toast.success("New note created!");
+            AddNewNoteHandler(note);
+            AddNoteBackHandler(false);
             setNote({
                 title: '',
                 description: '',
             })
+            toast.success("New note created!");
         } catch (error: any) {
             console.log(error)
             toast.error(error?.message)
@@ -89,7 +90,7 @@ const AddNote = ({ AddNoteBackHandler }: any) => {
 
                             {/* Button actions */}
                             <div className="mt-4 flex justify-center">
-                                <button className="bg-blue-600 py-2 px-3 rounded-lg hover:bg-blue-800 text-white">Add note</button>
+                                <button className="bg-blue-600 py-2 px-3 rounded-lg hover:bg-blue-800 text-white" onClick={handleAddNote} disabled={(note.title === "") || (note.description === "")}>Add note</button>
                                 <button className="bg-red-600 py-2 px-3 rounded-lg hover:bg-red-800 ms-3 text-white" onClick={() => AddNoteBackHandler(false)}>Back</button>
                             </div>
                         </form>

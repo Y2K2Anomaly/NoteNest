@@ -53,7 +53,7 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
     const onEdithandler = () => {
         setIsEdit(true);
         descRef?.current?.focus();
-        const note = allNotes.find((note: any) => note._id === noteId);
+        const note = allNotes?.find((note: any) => note._id === noteId);
         setEditedDesc(note.description);
     }
 
@@ -75,7 +75,7 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
                         <div className='w-full h-[350px] absolute p-2'>
                             {
                                 allNotes?.map((note: any) => (
-                                    <span key={note._id} className={`${noteId === note._id ? "block" : "hidden"} text-black text-lg`}>
+                                    <span key={note?._id} className={`${noteId === note?._id ? "block" : "hidden"} text-black text-lg`}>
                                         {isEdit ? (
                                             <textarea
                                                 ref={descRef}
@@ -85,7 +85,7 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
                                                 onChange={(event: any) => setEditedDesc(event.target.value)}
                                             />
                                         ) : (
-                                            <span>{note.description}</span>
+                                            <span>{note?.description}</span>
                                         )}
 
                                     </span>

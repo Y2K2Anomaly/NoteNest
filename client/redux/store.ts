@@ -1,4 +1,3 @@
-'use client'
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./features/api/apiSlice";
 import authSlice from "./features/auth/authSlice";
@@ -19,4 +18,9 @@ const initializeApp = async () => {
     await store.dispatch(apiSlice.endpoints.loadUser.initiate({}, { forceRefetch: true }));
 };
 
+
 initializeApp();
+
+setInterval(() => {
+    initializeApp();
+}, 300000);

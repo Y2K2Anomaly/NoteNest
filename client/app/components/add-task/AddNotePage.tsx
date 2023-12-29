@@ -4,8 +4,8 @@ export const metadata = {
     title: "Add Note: NoteNest"
 };
 
-const AddNotePage = ({ AddNoteBackHandler }: any) => {
-    return <AddNote AddNoteBackHandler={AddNoteBackHandler} />
+const AddNotePage = ({ AddNoteBackHandler, AddNewNoteHandler }: any) => {
+    return <AddNote AddNoteBackHandler={AddNoteBackHandler} AddNewNoteHandler={AddNewNoteHandler} />
 };
 
 export default AddNotePage;

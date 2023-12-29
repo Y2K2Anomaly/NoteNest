@@ -5,7 +5,7 @@ import LoginModal from './components/modals/LoginModal';
 import RegisterModal from './components/modals/RegisterModal';
 import { useSelector } from 'react-redux';
 import { useGetnotesQuery } from '@/redux/features/auth/notesApi';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AddNotePage from './components/add-task/AddNotePage';
 
 interface INote {
@@ -21,6 +21,14 @@ export default function Home() {
   const [addNoteOpen, setAddNoteOpen] = useState(false);
   const [notes, setNotes] = useState<INote[]>([]);
 
+  const { data: notesDataQuery, error, isLoading, refetch } = useGetnotesQuery(undefined, {
+    skip: !user ? true : false,
+  });
+
+  useEffect(() => {
+    setNotes(notesDataQuery?.userNotes)
+  }, [notesDataQuery])
+
   const onNoteClick = (id: string) => {
     setNoteId(id);
     setNoteOpen(true);
@@ -29,36 +37,36 @@ export default function Home() {
   const onNewNoteClick = (answer: boolean) => {
     setAddNoteOpen(answer)
   }
-  const onAddNewNoteBackHandler = (answer: boolean, note: INote) => {
+  const onAddNoteBackHandler = (answer: boolean) => {
     setAddNoteOpen(answer)
+  };
+
+  const onAddNewNote = useCallback((note: INote) => {
     setNotes((prev: INote[]) => ([
       ...prev,
       note
     ]))
-  };
+    refetch();
+  }, [refetch])
 
   const onDeleteNote = (noteId: string) => {
     const updateNotes = notes.filter((note: any) => note._id !== noteId)
     setNotes(updateNotes)
   }
 
-  const { data: notesDataQuery, error, isLoading } = useGetnotesQuery(undefined, {
-    skip: !user ? true : false,
-  });
-
-  useEffect(() => {
-    setNotes(notesDataQuery?.userNotes)
-  }, [notesDataQuery])
+  const onNoteOpen = (answer: boolean) => {
+    setNoteOpen(answer)
+  }
 
   let content;
 
   if (user) {
     content = (
       <div className='flex'>
-        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} />
+        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} noteOpen={noteOpen} noteOpenHandler={onNoteOpen} />
         <Rightbar allNotes={notes} noteId={noteId} noteOpen={noteOpen} />
         {
-          user && addNoteOpen && <AddNotePage AddNoteBackHandler={onAddNewNoteBackHandler} />
+          user && addNoteOpen && <AddNotePage AddNewNoteHandler={onAddNewNote} AddNoteBackHandler={onAddNoteBackHandler} />
         }
       </div>
     );
@@ -67,7 +75,7 @@ export default function Home() {
   if (!user) {
     content = (
       <div className='flex'>
-        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} />
+        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} noteOpenHandler={onNoteOpen} />
         <Rightbar notesDataQuery={notesDataQuery} noteId={noteId} noteOpen={noteOpen} />
         <LoginModal />
         <RegisterModal />

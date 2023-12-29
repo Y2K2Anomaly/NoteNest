@@ -45,8 +45,8 @@ const LoginModal = () => {
             await loginUser(data);
             setIsLoading(false);
             toast.success("Logged In");
-            router.refresh();
             loginModal.onClose();
+            router.refresh();
         } catch (err: any) {
             toast.error(error?.data?.message);
         }

@@ -12,7 +12,7 @@ import useLoginModal from '../hooks/useLoginModal';
 
 import { useRouter } from 'next/navigation';
 
-const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteHandler }: any) => {
+const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteHandler, noteOpenHandler }: any) => {
 
     const [isLogoutHovered, setIsLogoutHovered] = useState(false);
     const [isOption, setIsOption] = useState(false);
@@ -23,7 +23,8 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
 
     const handleNoteClick = useCallback((noteId: string) => {
         onNoteClickHandler(noteId);
-    }, [onNoteClickHandler]);
+        noteOpenHandler(true);
+    }, [onNoteClickHandler, noteOpenHandler]);
 
     const handleOptionClick = useCallback((noteId: string) => {
         setClickedNoteId(noteId);
@@ -114,17 +115,17 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                     <div>
                         {allNotes?.map((note: any) => (
                             <div
-                                key={note._id}
+                                key={note?._id}
                                 className={`flex justify-between items-center bg-slate-800 hover:bg-slate-900 w-full h-12 rounded-sm text-white mb-2 px-2`}
-                                onClick={() => handleNoteClick(note._id)}
+                                onClick={() => handleNoteClick(note?._id)}
                             >
-                                <p>{note.title}</p>
+                                <p>{note?.title}</p>
                                 <div
                                     className="relative active:scale-95"
-                                    onClick={() => handleOptionClick(note._id)}
+                                    onClick={() => handleOptionClick(note?._id)}
                                 >
                                     <SlOptionsVertical className="-z-100" />
-                                    {isOption && (clickedNoteId === note._id) && <Option noteId={note._id} onDeleteNoteHandler={onDeleteNoteHandler} />}
+                                    {isOption && (clickedNoteId === note?._id) && <Option noteId={note?._id} onDeleteNoteHandler={onDeleteNoteHandler} noteOpenHandler={noteOpenHandler} />}
                                 </div>
                             </div>
                         ))}

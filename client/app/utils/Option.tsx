@@ -3,7 +3,7 @@ import { styles } from '../styles/style';
 import { useDeleteNoteMutation } from '@/redux/features/auth/notesApi';
 import toast from 'react-hot-toast';
 
-const Option = ({ noteId, onDeleteNoteHandler }: any) => {
+const Option = ({ noteId, onDeleteNoteHandler, noteOpenHandler }: any) => {
 
     const [deleteNote, { error, isSuccess }] = useDeleteNoteMutation() as any;
 
@@ -11,10 +11,11 @@ const Option = ({ noteId, onDeleteNoteHandler }: any) => {
 
         try {
             await deleteNote(noteId)
+            noteOpenHandler(false)
             onDeleteNoteHandler(noteId)
             toast.success("deleted successfully!")
         } catch (err: any) {
-            toast.error(err.data.message)
+            toast.error(err?.message)
         }
     }
 
