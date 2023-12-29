@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     FieldValues,
     SubmitHandler,
@@ -24,7 +24,7 @@ const RegisterModal = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [registerUser, { data, error, isSuccess }] = useRegisterMutation() as any;
+    const [registerUser, { error, isError, isSuccess }] = useRegisterMutation() as any;
 
     const {
         register,
@@ -41,18 +41,17 @@ const RegisterModal = () => {
     })
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        try {
-            setIsLoading(true);
-            await registerUser(data);
-            setIsLoading(false);
-            toast.success("New user created");
-            router.refresh();
-            registerModal.onClose();
-            loginModal.onOpen();
-        } catch (err: any) {
-            toast.error(error?.data?.message);
-        }
+        setIsLoading(true);
+        await registerUser(data);
+        setIsLoading(false);
+        registerModal.onClose();
+        loginModal.onOpen();
     }
+
+    useEffect(() => {
+        isSuccess && toast.success("New user created");
+        isError && toast.error(error?.data?.message);
+    }, [isSuccess, isError, error])
 
     const toggle = useCallback(() => {
         registerModal.onClose();

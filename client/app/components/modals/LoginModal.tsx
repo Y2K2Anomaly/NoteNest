@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     FieldValues,
     SubmitHandler,
@@ -24,7 +24,7 @@ const LoginModal = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [loginUser, { data, error, isSuccess }] = useLoginMutation() as any;
+    const [loginUser, { error, isError, isSuccess }] = useLoginMutation() as any;
 
     const {
         register,
@@ -40,17 +40,16 @@ const LoginModal = () => {
     })
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        try {
-            setIsLoading(true);
-            await loginUser(data);
-            setIsLoading(false);
-            toast.success("Logged In");
-            loginModal.onClose();
-            router.refresh();
-        } catch (err: any) {
-            toast.error(error?.data?.message);
-        }
+        setIsLoading(true);
+        await loginUser(data);
+        setIsLoading(false);
+        loginModal.onClose();
     }
+
+    useEffect(() => {
+        isSuccess && toast.success("Logged In");
+        isError && toast.error(error?.data?.message);
+    }, [isSuccess, isError, error])
 
     const toggle = useCallback(() => {
         loginModal.onClose();

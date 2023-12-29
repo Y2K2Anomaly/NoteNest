@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaPowerOff, FaSearch } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -56,6 +56,12 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
         }
         onNewNoteHandler(true)
     };
+
+    const scrollRef = useRef() as any;
+
+    useEffect(() => {
+        scrollRef?.current?.scrollIntoView({ behavior: "smooth" })
+    }, [])
 
     return (
         <div className='flex flex-col bg-gray-700 h-screen w-[25%]'>
@@ -118,6 +124,7 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                                 key={note?._id}
                                 className={`flex justify-between items-center bg-slate-800 hover:bg-slate-900 w-full h-12 rounded-sm text-white mb-2 px-2`}
                                 onClick={() => handleNoteClick(note?._id)}
+                                ref={scrollRef}
                             >
                                 <p>{note?.title}</p>
                                 <div

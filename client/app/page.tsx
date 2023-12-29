@@ -14,12 +14,17 @@ interface INote {
 }
 
 export default function Home() {
-  const user = useSelector((state: any) => state.auth.user);
+  const storeUser = useSelector((state: any) => state.auth.user);
 
   const [noteId, setNoteId] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
   const [addNoteOpen, setAddNoteOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const [notes, setNotes] = useState<INote[]>([]);
+
+  useEffect(() => {
+    setUser(storeUser)
+  }, [storeUser]);
 
   const { data: notesDataQuery, error, isLoading, refetch } = useGetnotesQuery(undefined, {
     skip: !user ? true : false,

@@ -11,3 +11,5 @@ node_modules/
 
 # Ignore next-env.d.ts file
 next-env.d.ts
+
+package-lock.json*
