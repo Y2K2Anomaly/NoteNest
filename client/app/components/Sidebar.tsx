@@ -11,8 +11,10 @@ import { useSelector } from 'react-redux';
 import useLoginModal from '../hooks/useLoginModal';
 
 import { useRouter } from 'next/navigation';
+import { useUpdateNoteMutation } from '@/redux/features/auth/notesApi';
+import toast from 'react-hot-toast';
 
-const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteHandler, noteOpenHandler }: any) => {
+const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteHandler, noteOpenHandler, noteId, refetchNotes }: any) => {
 
     const [isLogoutHovered, setIsLogoutHovered] = useState(false);
     const [isOption, setIsOption] = useState(false);
@@ -62,6 +64,36 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
     useEffect(() => {
         scrollRef?.current?.scrollIntoView({ behavior: "smooth" })
     }, [])
+
+    const [editedTitle, setEditedTitle] = useState("");
+    const titleRef = useRef<HTMLInputElement>(null);
+
+    const [isEdit, setIsEdit] = useState(false);
+
+    const [updateNote, { error, isError, isSuccess }] = useUpdateNoteMutation();
+
+    const onSaveEdit = async () => {
+        try {
+            const note = allNotes.find((note: any) => note._id === noteId);
+            await updateNote({ id: noteId, description: note.description, title: editedTitle });
+            setIsEdit(false);
+            refetchNotes();
+        } catch (err) {
+            console.log("Failed to save edit", err);
+        }
+    };
+
+    useEffect(() => {
+        isSuccess && toast.success("title updated!")
+        isError && toast.error("failed to update!")
+    }, [isError, isSuccess])
+
+    const onEdithandler = () => {
+        setIsEdit(true);
+        titleRef?.current?.focus();
+        const note = allNotes?.find((note: any) => note._id === noteId);
+        setEditedTitle(note.title);
+    }
 
     return (
         <div className='flex flex-col bg-gray-700 h-screen w-[25%]'>
@@ -122,17 +154,28 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                         {allNotes?.map((note: any) => (
                             <div
                                 key={note?._id}
-                                className={`flex justify-between items-center bg-slate-800 hover:bg-slate-900 w-full h-12 rounded-sm text-white mb-2 px-2 cursor-pointer`}
+                                className={`flex justify-between items-center bg-slate-800 ${!isEdit && "hover:bg-slate-900"} w-full h-12 rounded-sm text-white mb-2 px-2 cursor-pointer`}
                                 onClick={() => handleNoteClick(note?._id)}
                                 ref={scrollRef}
                             >
-                                <p>{note?.title}</p>
+                                {isEdit && (clickedNoteId === note._id) ? (
+                                    <input
+                                        ref={titleRef}
+                                        autoFocus
+                                        value={editedTitle}
+                                        className='editInput bg-slate-800 text-white outline-none w-full h-full overflow-hidden'
+                                        placeholder='title...'
+                                        onChange={(event: any) => setEditedTitle(event.target.value)}
+                                    />
+                                ) : (
+                                    <p>{note?.title}</p>
+                                )}
                                 <div
                                     className="relative active:scale-95"
                                     onClick={() => handleOptionClick(note?._id)}
                                 >
                                     <SlOptionsVertical className="-z-100" />
-                                    {isOption && (clickedNoteId === note?._id) && <Option noteId={note?._id} onDeleteNoteHandler={onDeleteNoteHandler} noteOpenHandler={noteOpenHandler} />}
+                                    {isOption && (clickedNoteId === note?._id) && <Option noteId={note?._id} onDeleteNoteHandler={onDeleteNoteHandler} noteOpenHandler={noteOpenHandler} onSaveEdit={onSaveEdit} onEdithandler={onEdithandler} isEdit={isEdit} />}
                                 </div>
                             </div>
                         ))}

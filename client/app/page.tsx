@@ -63,13 +63,17 @@ export default function Home() {
     setNoteOpen(answer)
   }
 
+  const refetchNotesHandler = () => {
+    refetch();
+  }
+
   let content;
 
   if (user) {
     content = (
       <div className='flex'>
-        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} noteOpen={noteOpen} noteOpenHandler={onNoteOpen} />
-        <Rightbar allNotes={notes} noteId={noteId} noteOpen={noteOpen} />
+        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} noteOpen={noteOpen} noteOpenHandler={onNoteOpen} noteId={noteId} refetchNotes={refetchNotesHandler} />
+        <Rightbar allNotes={notes} noteId={noteId} noteOpen={noteOpen} refetchNotes={refetchNotesHandler} />
         {
           user && addNoteOpen && <AddNotePage AddNewNoteHandler={onAddNewNote} AddNoteBackHandler={onAddNoteBackHandler} />
         }
@@ -80,8 +84,8 @@ export default function Home() {
   if (!user) {
     content = (
       <div className='flex'>
-        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} noteOpenHandler={onNoteOpen} />
-        <Rightbar notesDataQuery={notesDataQuery} noteId={noteId} noteOpen={noteOpen} />
+        <Sidebar allNotes={notes} onNoteClickHandler={onNoteClick} onNewNoteHandler={onNewNoteClick} onDeleteNoteHandler={onDeleteNote} noteOpen={noteOpen} noteOpenHandler={onNoteOpen} />
+        <Rightbar notesDataQuery={notesDataQuery} noteId={noteId} noteOpen={noteOpen} refetchNotes={refetch} />
         <LoginModal />
         <RegisterModal />
       </div>

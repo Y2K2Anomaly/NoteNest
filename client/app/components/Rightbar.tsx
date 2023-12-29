@@ -3,8 +3,10 @@ import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react'
 import { styles } from '../styles/style';
 import { useSelector } from 'react-redux';
+import { useUpdateNoteMutation } from '@/redux/features/auth/notesApi';
+import toast from 'react-hot-toast';
 
-const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
+const Rightbar = ({ allNotes, noteId, noteOpen, refetchNotes }: any) => {
     const [greeting, setGreeting] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const [isEdit, setIsEdit] = useState(false);
@@ -38,17 +40,25 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
     }, []);
 
     const [editedDesc, setEditedDesc] = useState("");
-    const descRef = useRef() as any;
+    const descRef = useRef<HTMLTextAreaElement>(null);
+
+    const [updateNote, { error, isError, isSuccess }] = useUpdateNoteMutation();
 
     const onSaveEdit = async () => {
         try {
-            const updatedPost = 0;
-            // onEdit(post._id, updatedPost)
+            const note = allNotes.find((note: any) => note._id === noteId);
+            await updateNote({ id: noteId, description: editedDesc, title: note?.title });
             setIsEdit(false);
+            refetchNotes();
         } catch (err) {
             console.log("Failed to save edit", err);
         }
     };
+
+    useEffect(() => {
+        isSuccess && toast.success("note updated!")
+        isError && toast.error("failed to update!")
+    }, [isError, isSuccess])
 
     const onEdithandler = () => {
         setIsEdit(true);
@@ -79,9 +89,10 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
                                         {isEdit ? (
                                             <textarea
                                                 ref={descRef}
+                                                autoFocus
                                                 value={editedDesc}
                                                 className='editInput outline-none w-full h-full overflow-hidden'
-                                                placeholder='edit...'
+                                                placeholder='description...'
                                                 onChange={(event: any) => setEditedDesc(event.target.value)}
                                             />
                                         ) : (
@@ -97,7 +108,7 @@ const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
                                 Edit
                             </button>
                             :
-                            <button className={`bg-blue-700 hover:bg-blue-600 ${styles.edit_save_button}`} onClick={() => setIsEdit(false)}>
+                            <button className={`bg-blue-700 hover:bg-blue-600 ${styles.edit_save_button}`} onClick={onSaveEdit}>
                                 Save
                             </button>
                         }

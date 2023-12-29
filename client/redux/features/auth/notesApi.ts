@@ -1,5 +1,11 @@
 import { apiSlice } from "../api/apiSlice";
 
+interface INote {
+    id: string
+    title: string;
+    description: string;
+}
+
 export const notesApi: any = apiSlice.injectEndpoints({
     endpoints: (builder: any) => ({
         // endpoints here
@@ -29,7 +35,7 @@ export const notesApi: any = apiSlice.injectEndpoints({
             }),
         }),
         updateNote: builder.mutation({
-            query: (id: any, description: string, title: string) => ({
+            query: ({ id, description, title }: INote) => ({
                 url: `/update-note/${id}`,
                 method: "PUT",
                 body: {

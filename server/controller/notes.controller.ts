@@ -80,8 +80,7 @@ export const getAllNotes = CatchAsyncError(async (req: Request, res: Response, n
 export const updateNote = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const title = req.body?.title;
-        const description = req.body?.description;
+        const { title, description } = req.body;
 
         const note = await notesModel.findById(id);
         if (!note) {
