@@ -12,11 +12,10 @@ import useLoginModal from '../hooks/useLoginModal';
 
 import { useRouter } from 'next/navigation';
 
-const Sidebar = ({ notesDataQuery, onNoteClickHandler }: any) => {
+const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteHandler }: any) => {
 
     const [isLogoutHovered, setIsLogoutHovered] = useState(false);
     const [isOption, setIsOption] = useState(false);
-    const [notes, setNotes] = useState([]);
 
     const router = useRouter();
 
@@ -41,14 +40,12 @@ const Sidebar = ({ notesDataQuery, onNoteClickHandler }: any) => {
         skip: !logout ? true : false,
     });
 
-    useEffect(() => {
-        notesDataQuery && setNotes(notesDataQuery.userNotes);
-    }, [notesDataQuery, notes]);
-
     const logoutHandler = () => {
         if (user) {
             setLogout(true)
             router.refresh();
+        } else {
+            loginModal.onOpen();
         }
     };
 
@@ -56,6 +53,7 @@ const Sidebar = ({ notesDataQuery, onNoteClickHandler }: any) => {
         if (!user) {
             loginModal.onOpen();
         }
+        onNewNoteHandler(true)
     };
 
     return (
@@ -105,16 +103,16 @@ const Sidebar = ({ notesDataQuery, onNoteClickHandler }: any) => {
                 </div>
             </div>
             <span className='block w-full h-[2px] bg-gray-400 mt-4 mb-2'></span>
-            <div className='ADD_NEW_&_ALL_NOTES w-[90%] mx-auto'>
+            <div className='ADD_NEW_&_ALL_ALLNOTES w-[90%] mx-auto'>
                 <h1 className="text-gray-400">Add new Note</h1>
                 <div className="flex justify-center w-80 px-2 py-4 bg-slate-800 hover:bg-slate-900 rounded-xl group active:scale-95 mx-auto" onClick={() => newNoteHandler()}>
                     <IoMdAdd color={"white"} className="transform group-hover:scale-125" />
                 </div>
 
                 <div className="mt-2">
-                    <h1 className="text-gray-400">All Notes: {notes.length === 0 ? " 0" : notes.length} </h1>
+                    <h1 className="text-gray-400">All Allnotes: {allNotes?.length === 0 ? " 0" : allNotes?.length} </h1>
                     <div>
-                        {notes?.map((note: any, index) => (
+                        {allNotes?.map((note: any) => (
                             <div
                                 key={note._id}
                                 className={`flex justify-between items-center bg-slate-800 hover:bg-slate-900 w-full h-12 rounded-sm text-white mb-2 px-2`}
@@ -126,7 +124,7 @@ const Sidebar = ({ notesDataQuery, onNoteClickHandler }: any) => {
                                     onClick={() => handleOptionClick(note._id)}
                                 >
                                     <SlOptionsVertical className="-z-100" />
-                                    {isOption && (clickedNoteId === note._id) && <Option />}
+                                    {isOption && (clickedNoteId === note._id) && <Option noteId={note._id} onDeleteNoteHandler={onDeleteNoteHandler} />}
                                 </div>
                             </div>
                         ))}

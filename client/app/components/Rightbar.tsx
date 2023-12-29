@@ -1,10 +1,10 @@
 "use client"
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { styles } from '../styles/style';
 import { useSelector } from 'react-redux';
 
-const Rightbar = ({ notesDataQuery, noteId, noteOpen }: any) => {
+const Rightbar = ({ allNotes, noteId, noteOpen }: any) => {
     const [greeting, setGreeting] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const [isEdit, setIsEdit] = useState(false);
@@ -37,6 +37,26 @@ const Rightbar = ({ notesDataQuery, noteId, noteOpen }: any) => {
         setCurrentDate(currentDateText);
     }, []);
 
+    const [editedDesc, setEditedDesc] = useState("");
+    const descRef = useRef(null) as any;
+
+    const onSaveEdit = async () => {
+        try {
+            const updatedPost = 0;
+            // onEdit(post._id, updatedPost)
+            setIsEdit(false);
+        } catch (err) {
+            console.log("Failed to save edit", err);
+        }
+    };
+
+    const onEdithandler = () => {
+        setIsEdit(true);
+        descRef?.current?.focus();
+        const note = allNotes.find((note: any) => note._id === noteId);
+        setEditedDesc(note.description);
+    }
+
     return (
         <div className="h-screen w-[75%] bg-slate-100 relative">
 
@@ -54,15 +74,26 @@ const Rightbar = ({ notesDataQuery, noteId, noteOpen }: any) => {
                     <div className={`${!noteOpen && "hidden"} flex ${styles.note_body}`}>
                         <div className='w-full h-[350px] absolute p-2'>
                             {
-                                notesDataQuery?.userNotes?.map((note: any) => (
+                                allNotes?.map((note: any) => (
                                     <span key={note._id} className={`${noteId === note._id ? "block" : "hidden"} text-black text-lg`}>
-                                        {note.description}
+                                        {isEdit ? (
+                                            <textarea
+                                                ref={descRef}
+                                                value={editedDesc}
+                                                className='editInput outline-none w-full h-full overflow-hidden'
+                                                placeholder='edit...'
+                                                onChange={(event: any) => setEditedDesc(event.target.value)}
+                                            />
+                                        ) : (
+                                            <span>{note.description}</span>
+                                        )}
+
                                     </span>
                                 ))
                             }
                         </div>
                         {!isEdit ?
-                            <button className={`bg-red-700 hover:bg-red-600 ${styles.edit_save_button}`} onClick={() => setIsEdit(true)}>
+                            <button className={`bg-red-700 hover:bg-red-600 ${styles.edit_save_button}`} onClick={onEdithandler}>
                                 Edit
                             </button>
                             :
@@ -81,7 +112,7 @@ const Rightbar = ({ notesDataQuery, noteId, noteOpen }: any) => {
                 )
             }
             {
-                !noteOpen && (
+                !noteOpen && user && (
                     <div className={`flex justify-center items-center ${styles.note_body}`}>
                         <h1 className="text-[48px]">
                             Welcome, click to open any note!

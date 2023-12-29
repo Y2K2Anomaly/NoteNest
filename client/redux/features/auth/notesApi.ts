@@ -1,16 +1,45 @@
 import { apiSlice } from "../api/apiSlice";
 
-export const notesApi = apiSlice.injectEndpoints({
-    endpoints: (builder) => ({
+export const notesApi: any = apiSlice.injectEndpoints({
+    endpoints: (builder: any) => ({
         // endpoints here
         getnotes: builder.query({
-            query: (data) => ({
+            query: (data: any) => ({
                 url: "/notes",
                 method: "GET",
                 credentials: "include" as const,
             })
-        })
+        }),
+        createNote: builder.mutation({
+            query: ({ title, description }: any) => ({
+                url: "/add-new-note",
+                method: "POST",
+                body: {
+                    title,
+                    description
+                },
+                credentials: "include" as const
+            }),
+        }),
+        deleteNote: builder.mutation({
+            query: (id: any) => ({
+                url: `/delete-note/${id}`,
+                method: "DELETE",
+                credentials: "include" as const
+            }),
+        }),
+        updateNote: builder.mutation({
+            query: (id: any, description: string, title: string) => ({
+                url: `/update-note/${id}`,
+                method: "PUT",
+                body: {
+                    title,
+                    description
+                },
+                credentials: "include" as const
+            }),
+        }),
     }),
 });
 
-export const { useGetnotesQuery } = notesApi;
+export const { useGetnotesQuery, useCreateNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } = notesApi;

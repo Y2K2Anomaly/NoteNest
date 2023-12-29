@@ -27,6 +27,15 @@ export const addNewNote = CatchAsyncError(async (req: Request, res: Response, ne
     try {
         const { title, description } = req.body;
 
+        if (!title || !description) {
+            if (!title) {
+                return next(new ErrorHandler("Please enter the title", 400));
+            }
+            if (!description) {
+                return next(new ErrorHandler("Please enter the description", 400));
+            }
+        }
+
         const noteExist = await notesModel.findOne({ title });
         if (noteExist) {
             return next(new ErrorHandler("Title already exist", 400));
@@ -91,7 +100,7 @@ export const updateNote = CatchAsyncError(async (req: Request, res: Response, ne
         return res.status(200).json(
             {
                 success: true,
-                message: "Updated note successfully!",
+                note,
             }
         );
     } catch (error: any) {
