@@ -69,9 +69,9 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                 <h1 className='text-center text-3xl font-bold text-[#cfcfcf]'>NoteNest</h1>
             </div>
             <div className="flex items-center justify-end w-full space-x-2 rounded-md px-4 py-2">
-                <h1 className='text-[#ef0000] text-xl'>{user?.name || "no_user"}</h1>
+                <h1 className='text-[#ef0000] text-xl cursor-default'>{user?.name || "no_user"}</h1>
                 <div
-                    className={`${styles.hover_circle} relative`}
+                    className={`${styles.hover_circle} relative cursor-pointer`}
                     onMouseEnter={() => setIsLogoutHovered(true)}
                     onMouseLeave={() => setIsLogoutHovered(false)}
                     onClick={logoutHandler}
@@ -91,7 +91,7 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                     <FaSearch className="absolute z-10 ml-2 mt-2" color={"white"} />
                     <input type="text" className='rounded-xl text-white w-full px-8 h-8 relative bg-slate-900' placeholder='Search' />
 
-                    <select name="" id="" className="rounded-xl w-full h-8 bg-green-600 text-white px-2 outline-none">
+                    <select name="" id="" className="rounded-xl w-full h-8 bg-green-600 text-white px-2 outline-none cursor-pointer">
                         <option value="Filter by Month" disabled selected>Filter by Month</option>
                         <option value="">All</option>
                         <option value="">January</option>
@@ -112,7 +112,7 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
             <span className='block w-full h-[2px] bg-gray-400 mt-4 mb-2'></span>
             <div className='ADD_NEW_&_ALL_ALLNOTES w-[90%] mx-auto'>
                 <h1 className="text-gray-400">Add new Note</h1>
-                <div className="flex justify-center w-80 px-2 py-4 bg-slate-800 hover:bg-slate-900 rounded-xl group active:scale-95 mx-auto" onClick={() => newNoteHandler()}>
+                <div className="flex justify-center w-80 px-2 py-4 bg-slate-800 hover:bg-slate-900 rounded-xl group active:scale-95 mx-auto cursor-pointer" onClick={() => newNoteHandler()}>
                     <IoMdAdd color={"white"} className="transform group-hover:scale-125" />
                 </div>
 
@@ -122,7 +122,7 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                         {allNotes?.map((note: any) => (
                             <div
                                 key={note?._id}
-                                className={`flex justify-between items-center bg-slate-800 hover:bg-slate-900 w-full h-12 rounded-sm text-white mb-2 px-2`}
+                                className={`flex justify-between items-center bg-slate-800 hover:bg-slate-900 w-full h-12 rounded-sm text-white mb-2 px-2 cursor-pointer`}
                                 onClick={() => handleNoteClick(note?._id)}
                                 ref={scrollRef}
                             >
