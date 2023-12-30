@@ -19,7 +19,7 @@ app.use(helmet());
 // cors => cross origin resource sharing
 app.use(
     cors({
-        origin: process.env.CLIENT,
+        origin: "https://notenest01.vercel.app",
         credentials: true,
     })
 );
@@ -28,7 +28,7 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 // middlewares to enable CORS for all routes
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT as string);
+    res.setHeader('Access-Control-Allow-Origin', "https://notenest01.vercel.app");
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.header("Access-Control-Allow-Credentials", "true");
