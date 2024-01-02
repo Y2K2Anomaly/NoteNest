@@ -18,6 +18,7 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
 
     const [isLogoutHovered, setIsLogoutHovered] = useState(false);
     const [isOption, setIsOption] = useState(false);
+    const [notes, setNotes] = useState(allNotes && allNotes);
 
     const router = useRouter();
 
@@ -95,6 +96,14 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
         setEditedTitle(note.title);
     }
 
+    const onFilterChange = (e: any) => {
+        const selectedMonth = e.target.value;
+        const filteredNotes = notes?.find((note: any) => new Date(note.createdAt).getMonth().toString() === selectedMonth
+        )
+
+        console.log(new Date(notes[0]?.createdAt).getMonth().toString())
+    }
+
     return (
         <div className='flex flex-col bg-gray-700 h-screen w-[25%]'>
             <div className="bg-slate-600 w-full px-4 py-2">
@@ -123,21 +132,21 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                     <FaSearch className="absolute z-10 ml-2 mt-2" color={"white"} />
                     <input type="text" className='rounded-xl text-white w-full px-8 h-8 relative bg-slate-900' placeholder='Search' />
 
-                    <select name="" id="" className="rounded-xl w-full h-8 bg-green-600 text-white px-2 outline-none cursor-pointer">
+                    <select name="" id="" className="rounded-xl w-full h-8 bg-green-600 text-white px-2 outline-none cursor-pointer" onChange={(e: any) => onFilterChange(e)}>
                         <option value="Filter by Month" disabled selected>Filter by Month</option>
-                        <option value="">All</option>
-                        <option value="">January</option>
-                        <option value="">Febuary</option>
-                        <option value="">March</option>
-                        <option value="">April</option>
-                        <option value="">May</option>
-                        <option value="">June</option>
-                        <option value="">July</option>
-                        <option value="">August</option>
-                        <option value="">September</option>
-                        <option value="">October</option>
-                        <option value="">November</option>
-                        <option value="">December</option>
+                        <option value="all">All</option>
+                        <option value="january">January</option>
+                        <option value="febuary">Febuary</option>
+                        <option value="march">March</option>
+                        <option value="april">April</option>
+                        <option value="may">May</option>
+                        <option value="june">June</option>
+                        <option value="july">July</option>
+                        <option value="august">August</option>
+                        <option value="september">September</option>
+                        <option value="october">October</option>
+                        <option value="november">November</option>
+                        <option value="december">December</option>
                     </select>
                 </div>
             </div>
@@ -149,9 +158,9 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                 </div>
 
                 <div className="mt-2">
-                    <h1 className="text-gray-400">All Allnotes: {allNotes?.length === 0 ? " 0" : allNotes?.length} </h1>
+                    <h1 className="text-gray-400">All Allnotes: {notes?.length === 0 ? " 0" : notes?.length} </h1>
                     <div>
-                        {allNotes?.map((note: any) => (
+                        {notes?.map((note: any) => (
                             <div
                                 key={note?._id}
                                 className={`flex justify-between items-center bg-slate-800 ${!isEdit && "hover:bg-slate-900"} w-full h-12 rounded-sm text-white mb-2 px-2 cursor-pointer`}
