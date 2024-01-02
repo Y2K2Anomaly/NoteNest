@@ -18,7 +18,6 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
 
     const [isLogoutHovered, setIsLogoutHovered] = useState(false);
     const [isOption, setIsOption] = useState(false);
-    const [notes, setNotes] = useState(allNotes && allNotes);
 
     const router = useRouter();
 
@@ -96,13 +95,13 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
         setEditedTitle(note.title);
     }
 
-    const onFilterChange = (e: any) => {
-        const selectedMonth = e.target.value;
-        const filteredNotes = notes?.find((note: any) => new Date(note.createdAt).getMonth().toString() === selectedMonth
-        )
+    // const onFilterChange = (e: any) => {
+    //     const selectedMonth = e.target.value;
+    //     const filteredNotes = notes?.find((note: any) => new Date(note.createdAt).getMonth().toString() === selectedMonth
+    //     )
 
-        console.log(new Date(notes[0]?.createdAt).getMonth().toString())
-    }
+    //     console.log(new Date(notes[0]?.createdAt).getMonth().toString())
+    // }
 
     return (
         <div className='flex flex-col bg-gray-700 h-screen w-[25%]'>
@@ -132,7 +131,12 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                     <FaSearch className="absolute z-10 ml-2 mt-2" color={"white"} />
                     <input type="text" className='rounded-xl text-white w-full px-8 h-8 relative bg-slate-900' placeholder='Search' />
 
-                    <select name="" id="" className="rounded-xl w-full h-8 bg-green-600 text-white px-2 outline-none cursor-pointer" onChange={(e: any) => onFilterChange(e)}>
+                    <select
+                        name=""
+                        id=""
+                        className="rounded-xl w-full h-8 bg-green-600 text-white px-2 outline-none cursor-pointer"
+                    // onChange={(e: any) => onFilterChange(e)}
+                    >
                         <option value="Filter by Month" disabled selected>Filter by Month</option>
                         <option value="all">All</option>
                         <option value="january">January</option>
@@ -158,9 +162,9 @@ const Sidebar = ({ allNotes, onNoteClickHandler, onNewNoteHandler, onDeleteNoteH
                 </div>
 
                 <div className="mt-2">
-                    <h1 className="text-gray-400">All Allnotes: {notes?.length === 0 ? " 0" : notes?.length} </h1>
+                    <h1 className="text-gray-400">All Allnotes: {allNotes?.length === 0 ? " 0" : allNotes?.length} </h1>
                     <div>
-                        {notes?.map((note: any) => (
+                        {allNotes?.map((note: any) => (
                             <div
                                 key={note?._id}
                                 className={`flex justify-between items-center bg-slate-800 ${!isEdit && "hover:bg-slate-900"} w-full h-12 rounded-sm text-white mb-2 px-2 cursor-pointer`}
