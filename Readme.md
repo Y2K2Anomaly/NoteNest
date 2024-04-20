@@ -2,6 +2,8 @@
 
 This is a simple note-taking application that allows users to perform CRUD operations (Create, Read, Update, Delete) on their notes.
 
+## Live: https://notenest01.vercel.app/
+
 ## Features:
 
 1. **Create Note:**
