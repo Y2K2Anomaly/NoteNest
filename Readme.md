@@ -27,25 +27,3 @@ This is a simple note-taking application that allows users to perform CRUD opera
 ## Technologies Used:
 
 - Nextjs, TailwindCSS, Typescript, RTK Query, Zustand, Nodejs, mongodb, jwt, bcryptJs...
-
-## Installation:
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/Y2K2Anomaly/NoteNest.git
-```
-
-2. Navigate to the project directory to client and server:
-
-3. Install dependencies:
-
-```bash
-npm install
-```
-
-4. Start the application:
-
-```bash
-npm run dev
-```
