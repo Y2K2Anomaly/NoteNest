@@ -35,7 +35,7 @@ This is a simple note-taking application that allows users to perform CRUD opera
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/note-app.git
+git clone https://github.com/Y2K2Anomaly/NoteNest.git
 ```
 
 2. Navigate to the project directory:
