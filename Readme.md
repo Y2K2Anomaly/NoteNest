@@ -2,7 +2,7 @@
 
 This is a simple note-taking application that allows users to perform CRUD operations (Create, Read, Update, Delete) on their notes.
 
-## Live: https://notenest01.vercel.app/
+### Live: https://notenest01.vercel.app/
 
 ## Features:
 
@@ -29,3 +29,29 @@ This is a simple note-taking application that allows users to perform CRUD opera
 ## Technologies Used:
 
 - Nextjs, TailwindCSS, Typescript, RTK Query, Zustand, Nodejs, mongodb, jwt, bcryptJs...
+
+## Installation:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/note-app.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd client & cd server
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Start the application:
+
+```bash
+npm run dev
+```
